@@ -14,24 +14,39 @@ $$\frac{\partial u}{\partial t}+c \frac{\partial u}{\partial x}=0$$
 
 $$ u\left(x\right) \approx \sum_{i=1}^{n}{u_i N_i(x)} $$
 
-<br/> where $u_i$ are the nodal values of the solution at each grid point.
+<br/> where $u_i$ are the nodal values of the displacement field.
 
-<br/> *3.2. Weak Formulation:* Applying the Galerkin method, the weak form of the 1D convection equation is derived by multiplying the original equation with a test function and integrating over the domain. This results in a system of linear equations for each element. The weak form is:
+<br/> *3.2. Weak Formulation:* Applying the Galerkin method, the weak form of the 1D convection equation is derived by multiplying the original equation with a test function and integrating over the domain. The weak form is:
 
 $$\int_{\Omega}{\left(\frac{\partial u}{\partial t} N_j+c \frac{\partial u}{\partial x}N_j\right)dx}=0$$
 
+<br/> *3.3. Stiffness and Mass Matrices:* Substituting the displacement field into the weak form leads to the formation of the mass matrix $𝑀$ and stiffness matrix $K$. The weak form becomes a system of linear equations:
+
+$$M \frac{du}{dt}+cKu=0$$
+
+The matrices are:
+<br/> *Mass Matrix M:* $$M_{ij}=\int_{\Omega}{N_i N_jdx}$$
+<br/> *Stiffness Matrix K:* $$K_{ij}=\int_{\Omega}{N_i \frac{\partial N_j}{\partial x}dx}$$
+
 This equation is discretized in both space and time.
 
-<br/> *3.3. Matrix Assembly:* The global stiffness and mass matrices are assembled for the entire domain. These matrices represent the spatial derivatives of the solution, while the time-stepping technique handles time integration.
+<br/> *3.4. Matrix Assembly:* The global stiffness and mass matrices are assembled for the entire domain. These matrices represent the spatial derivatives of the solution, while the time-stepping technique handles time integration.
 
 **4. Methodology:**
 <br/> *4.1. Mesh Generation:* The 1D domain is divided into elements with nodes at each boundary. In our example, we use 41 grid points between $x=0$ and $x=2$, and the solution is evolved over 25 time steps.
 
 <br/> *4.2. Time Stepping:* The time-stepping loop solves the system iteratively using the explicit forward Euler method. At each time step, the system of equations is updated using the matrix formulation, and the solution is advanced in time:
 
-$$u^{n+1}=u^{n}-\frac{c\Delta t}{\Delta x} (u_i - u_{i-1})$$
+$$\frac{du}{dt} \approx \frac{u^{n+1}-u^{n}}{\Delta t} $$
 
-<br/> *4.3. Boundary Conditions:* You will typically use Dirichlet or periodic boundary conditions for a simple convection problem.
+<br/> Substituting into the weak form and rearranging yields the update rule for each time step:
+
+$$u^{n+1} = u^{n} - \Delta t M^{-1} cK u^{n} $$
+
+<br/> Thus, the FEM-based linear convection solution is advanced in time by solving this linear system at each time step, with $M$ and $K$ precomputed based on the mesh. This method leads to a matrix-vector multiplication form, which is solved iteratively.
+
+<br/> *4.3. Boundary Conditions:* Dirichlet boundary conditions are implicitly assumed by the use of fixed values at the boundaries. At $x=0$, the value of $u(0)$ remains fixed according to the initial conditions.
+At $x=L$ (the other boundary), the value of $u(L)$ is also fixed, maintaining a constant boundary state.
 
 **5. Conclusion:**
 <br/> This FEM-based solver provides a structured approach to solving the 1D linear convection equation, making it highly flexible for different geometries and boundary conditions. By saving the solution in Gmsh or another visualization tool, the results can be easily analyzed.
