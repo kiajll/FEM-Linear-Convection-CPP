@@ -1,56 +1,70 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-using namespace std;
+#include <Eigen/Dense>  // Use Eigen library for matrix operations
 
-// Define parameters
-const int nx = 41;  // Number of grid points
+using namespace std;
+using namespace Eigen;
+
+const int nx = 20;  // Number of nodes
 const double L = 2.0;  // Length of domain
 const double dx = L / (nx - 1);  // Spatial step
 const double dt = 0.025;  // Time step
 const double c = 1.0;  // Wave speed
 const int nt = 25;  // Number of time steps
 
-// Function to initialize u
-vector<double> initialize_u() {
-    vector<double> u(nx, 1.0);
-    for (int i = int(0.5 / dx); i <= int(1.0 / dx); ++i) {
-        u[i] = 2.0;
-    }
+// Initialize the solution and force vectors
+VectorXd initialize_u() {
+    VectorXd u(nx);
+    u.setOnes();
+    u.segment(int(0.5 / dx), int((1.0 / dx) - (0.5 / dx))).setConstant(2.0);
     return u;
 }
 
-// Function to compute the FEM matrix for convection
-vector<double> fem_convection_matrix() {
-    vector<double> matrix(nx, 0.0);
-    // Assuming linear elements, the matrix assembly for FEM would go here
-    // Compute the stiffness matrix for the problem
-    return matrix;
+// Assemble the stiffness matrix
+MatrixXd assemble_stiffness_matrix() {
+    MatrixXd K = MatrixXd::Zero(nx, nx);
+    for (int i = 1; i < nx - 1; ++i) {
+        K(i, i) = 2 / dx;
+        K(i, i - 1) = -1 / dx;
+        K(i - 1, i) = -1 / dx;
+    }
+    return K;
 }
 
-// Time-stepping function
-void solve_convection(vector<double>& u) {
-    vector<double> u_new = u;  // Temporary vector for new values
+// Assemble the mass matrix
+MatrixXd assemble_mass_matrix() {
+    MatrixXd M = MatrixXd::Zero(nx, nx);
+    for (int i = 1; i < nx - 1; ++i) {
+        M(i, i) = 2.0 / 3.0 * dx;
+        M(i, i - 1) = 1.0 / 6.0 * dx;
+        M(i - 1, i) = 1.0 / 6.0 * dx;
+    }
+    return M;
+}
+
+// Time-stepping function using FEM
+void solve_convection(VectorXd& u, const MatrixXd& M, const MatrixXd& K) {
+    MatrixXd A = M + c * dt * K;  // A = M + dt * c * K
     for (int n = 0; n < nt; ++n) {
-        u_new = u;  // Copy old solution
-        // Loop over elements and apply FEM scheme
-        for (int i = 1; i < nx - 1; ++i) {
-            // FEM update formula (this is simplified, and the actual matrix would be used here)
-            u_new[i] = u[i] - c * dt / dx * (u[i] - u[i-1]);
-        }
-        u = u_new;
+        VectorXd f = M * u;  // Multiply M by current u
+        u = A.colPivHouseholderQr().solve(f);  // Solve the system
     }
 }
 
 int main() {
-    vector<double> u = initialize_u();
-    solve_convection(u);
+    // Initialize solution and matrices
+    VectorXd u = initialize_u();
+    MatrixXd K = assemble_stiffness_matrix();
+    MatrixXd M = assemble_mass_matrix();
 
-    // Print final solution
+    // Solve the convection problem
+    solve_convection(u, M, K);
+
+    // Print results
     for (int i = 0; i < nx; ++i) {
-        cout << u[i] << " ";
+        cout << "x[" << i << "] = " << i * dx << ", u[" << i << "] = " << u[i] << endl;
     }
-    cout << endl;
 
     return 0;
 }
