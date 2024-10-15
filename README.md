@@ -14,23 +14,23 @@ $$\frac{\partial u}{\partial t}+c \frac{\partial u}{\partial x}=0$$
 
 $$ u\left(x\right) \approx \sum_{i=1}^{n}{u_i N_i(x)} $$
 
-<br/> where $u_i$ are the nodal values of the displacement field.
+<br/> where $u_i$ are the nodal values of the velocity field.
 
 <br/> *3.2. Weak Formulation:* Applying the Galerkin method, the weak form of the 1D convection equation is derived by multiplying the original equation with a test function and integrating over the domain. The weak form is:
 
 $$\int_{\Omega}{\left(\frac{\partial u}{\partial t} N_j+c \frac{\partial u}{\partial x}N_j\right)dx}=0$$
 
-<br/> *3.3. Stiffness and Mass Matrices:* Substituting the displacement field into the weak form leads to the formation of the mass matrix $𝑀$ and stiffness matrix $K$. The weak form becomes a system of linear equations:
+<br/> *3.3. Convection and Inertia Matrices:* Substituting the velocity field into the weak form leads to the formation of the inertia (Mass) matrix $𝑀$ and convection (Stiffness) matrix $K$. The weak form becomes a system of linear equations:
 
 $$M \frac{du}{dt}+cKu=0$$
 
 The matrices are:
-<br/> *Mass Matrix M:* $$M_{ij}=\int_{\Omega}{N_i N_jdx}$$
-<br/> *Stiffness Matrix K:* $$K_{ij}=\int_{\Omega}{N_i \frac{\partial N_j}{\partial x}dx}$$
+<br/> *Inertia Matrix M:* $$M_{ij}=\int_{\Omega}{N_i N_jdx}$$
+<br/> *Convection Matrix K:* $$K_{ij}=\int_{\Omega}{N_i \frac{\partial N_j}{\partial x}dx}$$
 
 This equation is discretized in both space and time.
 
-<br/> *3.4. Matrix Assembly:* The global stiffness and mass matrices are assembled for the entire domain. These matrices represent the spatial derivatives of the solution, while the time-stepping technique handles time integration.
+<br/> *3.4. Matrix Assembly:* The global inertia and convection matrices are assembled for the entire domain. These matrices represent the spatial derivatives of the solution, while the time-stepping technique handles time integration.
 
 **4. Methodology:**
 <br/> *4.1. Mesh Generation:* The 1D domain is divided into elements with nodes at each boundary. In our example, we use 41 grid points between $x=0$ and $x=2$, and the solution is evolved over 25 time steps.
@@ -48,5 +48,5 @@ $$u^{n+1} = u^{n} - \Delta t M^{-1} cK u^{n} $$
 <br/> *4.3. Boundary Conditions:* Dirichlet boundary conditions are implicitly assumed by the use of fixed values at the boundaries. At $x=0$, the value of $u(0)$ remains fixed according to the initial conditions.
 At $x=L$ (the other boundary), the value of $u(L)$ is also fixed, maintaining a constant boundary state.
 
-**5. Conclusion:**
+**5. Results and Conclusion:**
 <br/> This FEM-based solver provides a structured approach to solving the 1D linear convection equation, making it highly flexible for different geometries and boundary conditions. By saving the solution in Gmsh or another visualization tool, the results can be easily analyzed.
