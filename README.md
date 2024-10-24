@@ -22,7 +22,7 @@ $$\int_{\Omega}{\left(\frac{\partial u}{\partial t} N_j+c \frac{\partial u}{\par
 
 <br/> *3.3. Convection and Inertia Matrices:* Substituting the velocity field into the weak form leads to the formation of the inertia (Mass) matrix $𝑀$ and convection (Stiffness) matrix $K$. The weak form becomes a system of linear equations:
 
-$$M \frac{du}{dt}+cKu=0$$
+$$M^T \frac{du}{dt}+cKu=0$$
 
 The matrices are:
 <br/> *Inertia Matrix M:* $$M_{ij}=\int_{\Omega}{N_i N_jdx}$$
@@ -41,7 +41,7 @@ $$\frac{du}{dt} \approx \frac{u^{n+1}-u^{n}}{\Delta t} $$
 
 <br/> Substituting into the weak form and rearranging yields the update rule for each time step:
 
-$$u^{n+1} = u^{n} - \Delta t M^{-1} cK u^{n} $$
+$$u^{n+1} = u^{n} - \Delta t (M^{T})^{-1} cK u^{n} $$
 
 <br/> Thus, the FEM-based linear convection solution is advanced in time by solving this linear system at each time step, with $M$ and $K$ precomputed based on the mesh. This method leads to a matrix-vector multiplication form, which is solved iteratively.
 
