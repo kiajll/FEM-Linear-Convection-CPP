@@ -1,4 +1,4 @@
-# 1D Linear Convection Solver Using Finite Element Method
+# 1D Linear Convection Solver Using Finite Element Method (FEM)
 **1. Introduction**
 <br/> This solver is designed to compute the 1D linear convection equation using the Finite Element Method (FEM). Convection equations model the propagation of quantities like heat or fluid, and FEM provides a structured way to discretize and solve such PDEs over irregular or complex geometries.
 
