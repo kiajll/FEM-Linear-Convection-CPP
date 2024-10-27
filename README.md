@@ -57,3 +57,9 @@ At $x=L$ (the other boundary), the value of $u(L)$ is also fixed, maintaining a 
 
 ## **5. Results and Conclusion:**
 <br/> This FEM-based solver provides a structured approach to solving the 1D linear convection equation, making it highly flexible for different geometries and boundary conditions. By saving the solution in Gmsh or another visualization tool, the results can be easily analyzed.
+
+### LICENSE
+```bash
+Licensed under the Creative Commons Attribution-NoDerivatives 4.0 International License.
+To view a copy of this license, visit https://creativecommons.org/licenses/by-nd/4.0/.
+```
