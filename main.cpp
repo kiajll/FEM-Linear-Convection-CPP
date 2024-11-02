@@ -1,3 +1,12 @@
+/************************************************************************
+* Governing equation: 1D linear Convection
+* Spatial Numerical Discretization: Finite Element Method
+* Temporal integrating Technique: Explicit Forward Euler Method
+* Structure paradigm: Procedural Oriented Programming
+* Author: Kiarash Jalali
+* Licensed under the Creative Commons Attribution-NoDerivatives 4.0, 
+* International License.
+************************************************************************/
 #include <iostream>
 #include <vector>
 #include <cmath>
